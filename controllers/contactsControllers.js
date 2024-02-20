@@ -9,9 +9,7 @@ import {
 export const getAllContacts = async (req, res) => {
   try {
     const contactList = await listContacts();
-    res.status(200).json({
-      data: { contactList },
-    });
+    res.status(200).json(contactList);
   } catch (e) {
     console.log(e.message);
   }
@@ -22,9 +20,7 @@ export const getOneContact = async (req, res) => {
     const contactId = req.params.id;
     const contact = await getContactById(contactId);
     if (contact) {
-      res.status(200).json({
-        data: contact,
-      });
+      res.status(200).json(contact);
       return;
     }
     res.status(404).json({
@@ -40,9 +36,7 @@ export const deleteContact = async (req, res) => {
     const contactId = req.params.id;
     const deleteContact = await removeContact(contactId);
     if (deleteContact) {
-      res.status(200).json({
-        data: deleteContact,
-      });
+      res.status(200).json(deleteContact);
       return;
     }
     res.status(404).json({
@@ -56,9 +50,7 @@ export const deleteContact = async (req, res) => {
 export const createContact = async (req, res) => {
   const { name, email, phone } = req.body;
   const newContact = await addContact(name, email, phone);
-  res.status(201).json({
-    data: newContact,
-  });
+  res.status(201).json(newContact);
 };
 
 export const updateContact = async (req, res) => {
@@ -73,7 +65,7 @@ export const updateContact = async (req, res) => {
       res.status(404).json({ message: "Not found" });
       return;
     }
-    return res.status(200).json({ data: updateContact });
+    return res.status(200).json(updateContact);
   } catch (e) {
     console.log(e.message);
   }
