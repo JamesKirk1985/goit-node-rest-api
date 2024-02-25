@@ -14,8 +14,12 @@ export const getAllContacts = async (req, res) => {
 
 export const getOneContact = async (req, res) => {
   const { id } = req.params;
+  if (id.length !== 24) {
+    res.status(400).json({ message: "Bad request" });
+  }
   try {
     const contact = await Contact.findById(id);
+    console.log(contact);
     if (!contact) {
       res.status(404).json({ message: "Not found" });
     }
@@ -27,6 +31,9 @@ export const getOneContact = async (req, res) => {
 
 export const deleteContact = async (req, res) => {
   const { id } = req.params;
+  if (id.length !== 24) {
+    res.status(400).json({ message: "Bad request" });
+  }
   try {
     const deleteContact = await Contact.findByIdAndDelete(id);
     if (!deleteContact) {
@@ -49,6 +56,9 @@ export const createContact = async (req, res) => {
 
 export const updateContact = async (req, res) => {
   const { id } = req.params;
+  if (id.length !== 24) {
+    res.status(400).json({ message: "Bad request" });
+  }
   const body = req.body;
   if (Object.keys(body).length === 0) {
     res.status(400).json({ message: "Body must have at least one field" });
@@ -69,6 +79,9 @@ export const updateContact = async (req, res) => {
 
 export const updateStatusContact = async (req, res) => {
   const { id } = req.params;
+  if (id.length !== 24) {
+    res.status(400).json({ message: "Bad request" });
+  }
   try {
     const result = await Contact.findByIdAndUpdate(id, req.body);
     if (!result) {
