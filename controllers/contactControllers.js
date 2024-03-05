@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 import { Contact } from "../DBModels/contactModel.js";
 import "dotenv/config";
 import jwt from "jsonwebtoken";
-import { extractingId } from "../services/contactsServices.js";
+
 const SECRET_KEY = process.env.SECRET_KEY;
 
 export const getAllContacts = async (req, res) => {
   try {
-    const userId = extractingId(req);
-    console.log(userId);
+    const userId = req.user._id;
+
     const contacts = await Contact.find({ owner: userId });
     if (!contacts) {
       res.status(404).json({ message: "Not found" });
@@ -20,11 +20,11 @@ export const getAllContacts = async (req, res) => {
 };
 
 export const getOneContact = async (req, res) => {
-  const userId = extractingId(req);
+  const userId = req.user._id;
   const { id } = req.params;
 
   try {
-    const contact = await Contact.find({ owner: userId, _id: id });
+    const contact = await Contact.findOne({ owner: userId, _id: id });
 
     if (!contact) {
       res.status(404).json({ message: "Not found" });
@@ -37,7 +37,7 @@ export const getOneContact = async (req, res) => {
 
 export const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const userId = extractingId(req);
+  const userId = req.user._id;
   try {
     const deleteContact = await Contact.findOneAndDelete({
       owner: userId,
@@ -53,7 +53,7 @@ export const deleteContact = async (req, res) => {
 };
 
 export const createContact = async (req, res) => {
-  const userId = extractingId(req);
+  const userId = req.user._id;
   try {
     const createContact = await Contact.create({ ...req.body, owner: userId });
     res.status(201).json(createContact);
@@ -63,7 +63,7 @@ export const createContact = async (req, res) => {
 };
 
 export const updateContact = async (req, res) => {
-  const userId = extractingId(req);
+  const userId = req.user._id;
   const { id } = req.params;
   const body = req.body;
   if (Object.keys(body).length === 0) {
