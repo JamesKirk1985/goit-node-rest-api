@@ -94,7 +94,7 @@ export const updateStatusContact = async (req, res) => {
   const userId = req.user._id;
   const { id } = req.params;
   try {
-    const result = await Contact.findByIdAndUpdate(
+    const result = await Contact.findOneAndUpdate(
       { _id: id, owner: userId },
       req.body,
       { new: true }
