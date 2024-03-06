@@ -91,13 +91,17 @@ export const updateContact = async (req, res) => {
 };
 
 export const updateStatusContact = async (req, res) => {
+  const userId = req.user._id;
   const { id } = req.params;
   try {
-    const result = await Contact.findByIdAndUpdate(id, req.body);
+    const result = await Contact.findByIdAndUpdate(
+      { _id: id, owner: userId },
+      req.body,
+      { new: true }
+    );
     if (!result) {
       res.status(404).json({ message: "Not found" });
     }
-    const contact = await Contact.findById(id);
-    res.status(200).json(contact);
+    res.status(200).json(result);
   } catch (error) {}
 };
