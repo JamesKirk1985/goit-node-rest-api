@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import gravatar from "gravatar";
 const Schema = mongoose.Schema;
 const userSchema = new Schema(
   {
@@ -19,6 +20,7 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    avatarURL: { type: String },
   },
   { versionKey: false }
 );
