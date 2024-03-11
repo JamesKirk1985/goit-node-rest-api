@@ -100,6 +100,12 @@ export const currentUser = async (req, res) => {
 
 export const upDateAvatar = async (req, res) => {
   const userId = req.user._id;
+
+  if (!req.file) {
+    res.status(400).json({ message: "the request must contain a file" });
+    return;
+  }
+
   const tempDir = path.join(req.file.path);
   const extname = path.extname(req.file.originalname);
   const basename = path.basename(req.file.originalname, extname);
