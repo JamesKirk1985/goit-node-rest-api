@@ -5,11 +5,14 @@ import {
   logout,
   currentUser,
   upDateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 } from "../controllers/authControllers.js";
 import { validateBody } from "../helpers/validateBody.js";
 import { registerSchema } from "../schemas/usersSchemas.js";
 import { validateToken } from "../helpers/validateToken.js";
-import upload from "../middleWares/avararUpLoad.js";
+import { emailSchema } from "../schemas/emailSchema.js";
+import upload from "../middleWares/avatarUpLoad.js";
 
 const authRouter = express.Router();
 
@@ -27,5 +30,9 @@ authRouter.patch(
   upload.single("avatar"),
   upDateAvatar
 );
+
+authRouter.get("/verify/:verificationToken", verifyEmail);
+
+authRouter.post("/verify", validateBody(emailSchema), resendVerifyEmail);
 
 export default authRouter;
