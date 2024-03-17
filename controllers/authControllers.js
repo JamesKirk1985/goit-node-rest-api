@@ -54,14 +54,17 @@ export const register = async (req, res) => {
 };
 
 export const verifyEmail = async (req, res) => {
-  const { verificationCode } = req.params;
-  const user = await User.findOne({ verificationCode });
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
+
   if (!user) {
-    throw HttpError(401, "Email not found");
+    res.status(404).json("Email not found");
+    // throw HttpError(401, "Email not found");
+    return;
   }
   await User.findByIdAndUpdate(user._id, {
     verify: true,
-    verificationCode: "",
+    verificationToken: "",
   });
   res.status(200).json({ message: "Verification successful" });
 };
